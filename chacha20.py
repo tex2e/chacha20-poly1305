@@ -272,20 +272,22 @@ if __name__ == '__main__':
 
             self.assertEqual(encrypted_message, expected_bytes)
 
-        @unittest.skip('TESTSKIP: "f2" => "d6"')
         def test_chacha20_encrypt_appendixA_2_3(self):
             from utils.hexdump import hexdump
             key = binascii.unhexlify(
                 b'1c9240a5eb55d38af333888604f6b5f0473917c1402b80099dca5cbc207075c0')
-            print("---")
-            print(hexdump(key))
             counter = 42
             nonce = binascii.unhexlify(b'000000000000000000000002')
-            print("---")
-            print(hexdump(nonce))
-            plaintext = b"'Twas brillig, and the slithy toves.Did gyre and gimble in the wabe:.All mimsy were the borogoves,.And the mome raths outgrabe."
-            print("---")
-            print(hexdump(plaintext))
+            plaintext = binascii.unhexlify(b''.join(b'''
+                27 54 77 61 73 20 62 72 69 6c 6c 69 67 2c 20 61
+                6e 64 20 74 68 65 20 73 6c 69 74 68 79 20 74 6f
+                76 65 73 0a 44 69 64 20 67 79 72 65 20 61 6e 64
+                20 67 69 6d 62 6c 65 20 69 6e 20 74 68 65 20 77
+                61 62 65 3a 0a 41 6c 6c 20 6d 69 6d 73 79 20 77
+                65 72 65 20 74 68 65 20 62 6f 72 6f 67 6f 76 65
+                73 2c 0a 41 6e 64 20 74 68 65 20 6d 6f 6d 65 20
+                72 61 74 68 73 20 6f 75 74 67 72 61 62 65 2e
+            '''.split()))
             encrypted_message = chacha20_encrypt(key, counter, nonce, plaintext)
 
             expected_bytes = binascii.unhexlify(b''.join(b'''
@@ -298,11 +300,6 @@ if __name__ == '__main__':
                 04 c6 a8 d1 bc d1 bf 4d 50 d6 15 4b 6d a7 31 b1
                 87 b5 8d fd 72 8a fa 36 75 7a 79 7a c1 88 d1
             '''.split()))
-            print("---")
-            print(hexdump(expected_bytes))
-
-            print("===")
-            print(hexdump(encrypted_message))
 
             self.assertEqual(encrypted_message, expected_bytes)
 
