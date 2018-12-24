@@ -17,9 +17,8 @@ def pad16(x: bytes) -> bytes:
 def num_to_8_le_bytes(num: int) -> bytes:
     return struct.pack('<Q', num)
 
-def chacha20_aead_encrypt(aad: bytes, key: bytes, iv: bytes,
-                          constant: bytes, plaintext: bytes):
-    nonce = constant + iv
+def chacha20_aead_encrypt(aad: bytes, key: bytes, nonce: bytes, plaintext: bytes):
+    # nonce = constant + iv
     otk = poly1305_key_gen(key, nonce)
     ciphertext = chacha20_encrypt(key, 1, nonce, plaintext)
     mac_data = aad + pad16(aad)
@@ -58,7 +57,8 @@ if __name__ == '__main__':
             '''.split()))
             iv = b'@ABCDEFG'
             constant = binascii.unhexlify(b'07000000')
-            ciphertext, tag = chacha20_aead_encrypt(aad, key, iv, constant, plaintext)
+            nonce = constant + iv
+            ciphertext, tag = chacha20_aead_encrypt(aad, key, nonce, plaintext)
 
             expected_ciphertext = binascii.unhexlify(b''.join(b'''
                 d3 1a 8d 34 64 8e 60 db 7b 86 af bc 53 ef 7e c2
