@@ -42,7 +42,7 @@ def chacha20_aead_decrypt(aad: bytes, key: bytes, nonce: bytes, ciphertext: byte
 if __name__ == '__main__':
     import unittest
 
-    class TestChacha20(unittest.TestCase):
+    class TestChacha20Poly1305(unittest.TestCase):
 
         def test_poly1305_key_gen(self):
             key = binascii.unhexlify(

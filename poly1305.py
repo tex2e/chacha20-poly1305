@@ -37,7 +37,7 @@ def poly1305_mac(msg: bytes, key: bytes) -> bytes:
 if __name__ == '__main__':
     import unittest
 
-    class TestChacha20(unittest.TestCase):
+    class TestPoly1305(unittest.TestCase):
 
         def test_poly1305_mac(self):
             msg = b'Cryptographic Forum Research Group'
