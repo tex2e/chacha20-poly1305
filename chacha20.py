@@ -1,6 +1,4 @@
 
-# https://tools.ietf.org/html/rfc8439
-
 import struct
 import binascii
 from typing import List
@@ -80,11 +78,6 @@ def chacha20_encrypt(key: bytes, counter: int, nonce: bytes, plaintext: bytes):
 
     return encrypted_message
 
-
-
-
-if __name__ == '__main__':
-    pass
 
 
 if __name__ == '__main__':
