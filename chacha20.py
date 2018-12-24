@@ -3,7 +3,6 @@
 
 import struct
 import binascii
-from hexdump import hexdump
 from typing import List
 
 # Finite field 2^32

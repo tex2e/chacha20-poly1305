@@ -1,7 +1,6 @@
 
 import math
 import binascii
-from hexdump import hexdump
 
 def clamp(r: int) -> int:
     return r & 0x0ffffffc0ffffffc0ffffffc0fffffff
@@ -41,4 +40,3 @@ if __name__ == '__main__':
         b'85d6be7857556d337f4452fe42d506a80103808afb0db2fd4abff6af4149f51b')
     tag = poly1305_mac(msg, key)
     print(tag)
-    print(hexdump(tag))
