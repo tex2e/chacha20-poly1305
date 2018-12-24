@@ -9,48 +9,25 @@ This provides three algorithms:
     Data (AEAD) construction.
 
 
-## The ChaCha Quarter Round
-
-```
-a += b; d ^= a; d <<<= 16;
-c += d; b ^= c; b <<<= 12;
-a += b; d ^= a; d <<<= 8;
-c += d; b ^= c; b <<<= 7;
-```
-
-- `+` : integer addition modulo 2^32 : (a + b) & 0xffffffff
-- `^` : bitwise XOR : a ^ b
-- `<<< n` : n-bit left roll : (a << b) & 0xffffffff
-
-## The ChaCha20 Block Function
-
-The ChaCha20 state is initialized as follows:
-
--  The first four words (0-3) are constants: 0x61707865, 0x3320646e,
-   0x79622d32, 0x6b206574.
-
--  The next eight words (4-11) are taken from the 256-bit key by
-   reading the bytes in little-endian order, in 4-byte chunks.
-
--  Word 12 is a block counter.  Since each block is 64-byte, a 32-bit
-   word is enough for 256 gigabytes of data.
-
--  Words 13-15 are a nonce, which MUST not be repeated for the same
-   key.  The 13th word is the first 32 bits of the input nonce taken
-   as a little-endian integer, while the 15th word is the last 32
-   bits.
-
-        cccccccc  cccccccc  cccccccc  cccccccc
-        kkkkkkkk  kkkkkkkk  kkkkkkkk  kkkkkkkk
-        kkkkkkkk  kkkkkkkk  kkkkkkkk  kkkkkkkk
-        bbbbbbbb  nnnnnnnn  nnnnnnnn  nnnnnnnn
-
-c=constant k=key b=blockcount n=nonce
-
-
 ## References
 
 - [ChaCha20 and Poly1305 for IETF Protocols (RFC 8439)](https://tools.ietf.org/html/rfc8439)
+- [ChaCha20 and Poly1305 for IETF Protocols (RFC 7539) -- Obsoleted](https://tools.ietf.org/html/rfc7539)
 - [ChaCha, a variant of Salsa20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 - [The Poly1305-AES message-authentication code](http://cr.yp.to/mac/poly1305-20050329.pdf)
-- [Recommended Nonce Formation -- An Interface and Algorithms for Authenticated Encryption (RFC 5116)](https://tools.ietf.org/html/rfc5116#section-3.2)
+- [An Interface and Algorithms for Authenticated Encryption (RFC 5116)](https://tools.ietf.org/html/rfc5116)
+  - [3.2. Recommended Nonce Formation](https://tools.ietf.org/html/rfc5116#section-3.2)
+  - [4. Requirements on AEAD Algorithm Specifications](https://tools.ietf.org/html/rfc5116#section-4)
+
+---
+
+- [Cache-Collision Timing Attacks Against AES](https://www.microsoft.com/en-us/research/wp-content/uploads/2006/10/aes-timing.pdf)
+- [Advanced Encryption Standard (AES)](https://csrc.nist.gov/csrc/media/publications/fips/197/final/documents/fips-197.pdf)
+- [New Features of Latin Dances: Analysis of Salsa, ChaCha, and Rumba](http://cr.yp.to/rumba20/newfeatures-20071218.pdf)
+- [Modified version of 'Latin Dances Revisited: New Analytic Results of Salsa20 and ChaCha'](https://eprint.iacr.org/2012/065.pdf)
+- [NaCl: Networking and Cryptography library](http://nacl.cr.yp.to/)
+- [poly1305-donna (GitHub)](https://github.com/floodyberry/poly1305-donna)
+- [A Security Analysis of the Composition of ChaCha20 and Poly1305](https://eprint.iacr.org/2014/613.pdf)
+- [Recommendation for the Triple Data Encryption Algorithm (TDEA) Block Cipher (NIST 800-67)](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-67r2.pdf)
+- [Selection of Future Cryptographic Standards](https://tools.ietf.org/html/draft-mcgrew-standby-cipher-00)
+- [Performance Measurements of ChaCha20](https://www.imperialviolet.org/2014/02/27/tlssymmetriccrypto.html)
