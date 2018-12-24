@@ -1,5 +1,5 @@
 
-# ChaCha20 and Poly1305 for IETF Protocols
+# ChaCha20 and Poly1305 for IETF Protocols (RFC 8439)
 
 This provides three algorithms:
 
