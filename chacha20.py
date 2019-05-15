@@ -54,7 +54,7 @@ def chacha20_block(key: bytes, counter: int, nonce: bytes) -> bytes:
     nonce     = [F2_32(x) for x in struct.unpack('<III', nonce)]
     state = constants + key + counter + nonce
     initial_state = state[:]
-    for i in range(1, 11):
+    for i in range(10):
         state = inner_block(state)
     state = [ s + init_s for s, init_s in zip(state, initial_state) ]
     return serialize(state)
