@@ -38,6 +38,14 @@ def chacha20_aead_decrypt(aad: bytes, key: bytes, nonce: bytes, ciphertext: byte
     return (plaintext, tag)
 
 
+def compare_const_time(a, b):
+    """Compare strings in constant time."""
+    if len(a) != len(b): return False
+    result = 0
+    for x, y in zip(a, b):
+        result |= x ^ y
+    return result == 0
+
 def encrypt_and_tag(key, nonce, plaintext, aad):
     return chacha20_aead_encrypt(key=key, nonce=nonce, plaintext=plaintext, aad=aad)
 
@@ -45,8 +53,7 @@ def decrypt_and_verify(key, nonce, plaintext, mac, aad):
     plaintext, tag = \
         chacha20_aead_decrypt(key=key, nonce=nonce, plaintext=plaintext, aad=aad)
 
-    # TODO: constant time compare
-    if tag != mac:
+    if compare_const_time(tag, mac):
         return Exception('bad tag!')
 
     return plaintext
