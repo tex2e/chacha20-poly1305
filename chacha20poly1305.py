@@ -38,6 +38,19 @@ def chacha20_aead_decrypt(aad: bytes, key: bytes, nonce: bytes, ciphertext: byte
     return (plaintext, tag)
 
 
+def encrypt_and_tag(key, nonce, plaintext, aad):
+    return chacha20_aead_encrypt(key=key, nonce=nonce, plaintext=plaintext, aad=aad)
+
+def decrypt_and_verify(key, nonce, plaintext, mac, aad):
+    plaintext, tag =
+        chacha20_aead_decrypt(key=key, nonce=nonce, plaintext=plaintext, aad=aad)
+
+    # TODO: constant time compare
+    if tag != mac:
+        return Exception('bad tag!')
+
+    return plaintext
+
 
 if __name__ == '__main__':
     import unittest
