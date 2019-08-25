@@ -49,11 +49,11 @@ def compare_const_time(a, b):
 def encrypt_and_tag(key, nonce, plaintext, aad):
     return chacha20_aead_encrypt(key=key, nonce=nonce, plaintext=plaintext, aad=aad)
 
-def decrypt_and_verify(key, nonce, plaintext, mac, aad):
+def decrypt_and_verify(key, nonce, ciphertext, mac, aad):
     plaintext, tag = \
-        chacha20_aead_decrypt(key=key, nonce=nonce, plaintext=plaintext, aad=aad)
+        chacha20_aead_decrypt(key=key, nonce=nonce, ciphertext=ciphertext, aad=aad)
 
-    if compare_const_time(tag, mac):
+    if not compare_const_time(tag, mac):
         return Exception('bad tag!')
 
     return plaintext
@@ -65,70 +65,70 @@ if __name__ == '__main__':
     class TestChacha20Poly1305(unittest.TestCase):
 
         def test_poly1305_key_gen(self):
-            key = binascii.unhexlify(
-                b'808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f')
-            nonce = binascii.unhexlify(b'000000000001020304050607')
+            key = bytes.fromhex(
+                '808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f')
+            nonce = bytes.fromhex('000000000001020304050607')
             onetime_key = poly1305_key_gen(key, nonce)
 
-            expected_bytes = binascii.unhexlify(b''.join(b'''
+            expected_bytes = bytes.fromhex('''
                 8a d5 a0 8b 90 5f 81 cc 81 50 40 27 4a b2 94 71
                 a8 33 b6 37 e3 fd 0d a5 08 db b8 e2 fd d1 a6 46
-            '''.split()))
+            ''')
 
             self.assertEqual(onetime_key, expected_bytes)
 
         def test_poly1305_key_gen_appendixA_4_1(self):
-            key = binascii.unhexlify(
-                b'0000000000000000000000000000000000000000000000000000000000000000')
-            nonce = binascii.unhexlify(b'000000000000000000000000')
+            key = bytes.fromhex(
+                '0000000000000000000000000000000000000000000000000000000000000000')
+            nonce = bytes.fromhex('000000000000000000000000')
             onetime_key = poly1305_key_gen(key, nonce)
 
-            expected_bytes = binascii.unhexlify(b''.join(b'''
+            expected_bytes = bytes.fromhex('''
                 76 b8 e0 ad a0 f1 3d 90 40 5d 6a e5 53 86 bd 28
                 bd d2 19 b8 a0 8d ed 1a a8 36 ef cc 8b 77 0d c7
-            '''.split()))
+            ''')
 
             self.assertEqual(onetime_key, expected_bytes)
 
         def test_poly1305_key_gen_appendixA_4_2(self):
-            key = binascii.unhexlify(
-                b'0000000000000000000000000000000000000000000000000000000000000001')
-            nonce = binascii.unhexlify(b'000000000000000000000002')
+            key = bytes.fromhex(
+                '0000000000000000000000000000000000000000000000000000000000000001')
+            nonce = bytes.fromhex('000000000000000000000002')
             onetime_key = poly1305_key_gen(key, nonce)
 
-            expected_bytes = binascii.unhexlify(b''.join(b'''
+            expected_bytes = bytes.fromhex('''
                 ec fa 25 4f 84 5f 64 74 73 d3 cb 14 0d a9 e8 76
                 06 cb 33 06 6c 44 7b 87 bc 26 66 dd e3 fb b7 39
-            '''.split()))
+            ''')
 
             self.assertEqual(onetime_key, expected_bytes)
 
         def test_poly1305_key_gen_appendixA_4_3(self):
-            key = binascii.unhexlify(
-                b'1c9240a5eb55d38af333888604f6b5f0473917c1402b80099dca5cbc207075c0')
-            nonce = binascii.unhexlify(b'000000000000000000000002')
+            key = bytes.fromhex(
+                '1c9240a5eb55d38af333888604f6b5f0473917c1402b80099dca5cbc207075c0')
+            nonce = bytes.fromhex('000000000000000000000002')
             onetime_key = poly1305_key_gen(key, nonce)
 
-            expected_bytes = binascii.unhexlify(b''.join(b'''
+            expected_bytes = bytes.fromhex('''
                 96 5e 3b c6 f9 ec 7e d9 56 08 08 f4 d2 29 f9 4b
                 13 7f f2 75 ca 9b 3f cb dd 59 de aa d2 33 10 ae
-            '''.split()))
+            ''')
 
             self.assertEqual(onetime_key, expected_bytes)
 
         def test_chacha20_aead_encrypt(self):
             plaintext = b"Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it."
-            aad = binascii.unhexlify(b'50515253c0c1c2c3c4c5c6c7')
-            key = binascii.unhexlify(b''.join(b'''
+            aad = bytes.fromhex('50515253c0c1c2c3c4c5c6c7')
+            key = bytes.fromhex('''
                 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f
                 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f
-            '''.split()))
+            ''')
             iv = b'@ABCDEFG'
-            constant = binascii.unhexlify(b'07000000')
+            constant = bytes.fromhex('07000000')
             nonce = constant + iv
             ciphertext, tag = chacha20_aead_encrypt(aad, key, nonce, plaintext)
 
-            expected_ciphertext = binascii.unhexlify(b''.join(b'''
+            expected_ciphertext = bytes.fromhex('''
                 d3 1a 8d 34 64 8e 60 db 7b 86 af bc 53 ef 7e c2
                 a4 ad ed 51 29 6e 08 fe a9 e2 b5 a7 36 ee 62 d6
                 3d be a4 5e 8c a9 67 12 82 fa fb 69 da 92 72 8b
@@ -137,20 +137,20 @@ if __name__ == '__main__':
                 fa b3 24 e4 fa d6 75 94 55 85 80 8b 48 31 d7 bc
                 3f f4 de f0 8e 4b 7a 9d e5 76 d2 65 86 ce c6 4b
                 61 16
-            '''.split()))
-            expected_tag = binascii.unhexlify(b'1ae10b594f09e26a7e902ecbd0600691')
+            ''')
+            expected_tag = bytes.fromhex('1ae10b594f09e26a7e902ecbd0600691')
 
             self.assertEqual(ciphertext, expected_ciphertext)
             self.assertEqual(tag, expected_tag)
 
         def test_chacha20poly1305_aead_decryption_appendixA_5_1(self):
-            aad = binascii.unhexlify(b'f33388860000000000004e91')
-            key = binascii.unhexlify(b''.join(b'''
+            aad = bytes.fromhex('f33388860000000000004e91')
+            key = bytes.fromhex('''
                 1c 92 40 a5 eb 55 d3 8a f3 33 88 86 04 f6 b5 f0
                 47 39 17 c1 40 2b 80 09 9d ca 5c bc 20 70 75 c0
-            '''.split()))
-            nonce = binascii.unhexlify(b'000000000102030405060708')
-            ciphertext = binascii.unhexlify(b''.join(b'''
+            ''')
+            nonce = bytes.fromhex('000000000102030405060708')
+            ciphertext = bytes.fromhex('''
                 64 a0 86 15 75 86 1a f4 60 f0 62 c7 9b e6 43 bd
                 5e 80 5c fd 34 5c f3 89 f1 08 67 0a c7 6c 8c b2
                 4c 6c fc 18 75 5d 43 ee a0 9e e9 4e 38 2d 26 b0
@@ -168,11 +168,11 @@ if __name__ == '__main__':
                 49 e6 17 d9 1d 36 10 94 fa 68 f0 ff 77 98 71 30
                 30 5b ea ba 2e da 04 df 99 7b 71 4d 6c 6f 2c 29
                 a6 ad 5c b4 02 2b 02 70 9b
-            '''.split()))
+            ''')
 
             plaintext, tag = chacha20_aead_decrypt(aad, key, nonce, ciphertext)
 
-            expected_plaintext = binascii.unhexlify(b''.join(b'''
+            expected_plaintext = bytes.fromhex('''
                 49 6e 74 65 72 6e 65 74 2d 44 72 61 66 74 73 20
                 61 72 65 20 64 72 61 66 74 20 64 6f 63 75 6d 65
                 6e 74 73 20 76 61 6c 69 64 20 66 6f 72 20 61 20
@@ -190,8 +190,8 @@ if __name__ == '__main__':
                 6d 20 6f 74 68 65 72 20 74 68 61 6e 20 61 73 20
                 2f e2 80 9c 77 6f 72 6b 20 69 6e 20 70 72 6f 67
                 72 65 73 73 2e 2f e2 80 9d
-            '''.split()))
-            expected_tag = binascii.unhexlify(b'eead9d67890cbb22392336fea1851f38')
+            ''')
+            expected_tag = bytes.fromhex('eead9d67890cbb22392336fea1851f38')
 
             self.assertEqual(plaintext, expected_plaintext)
             self.assertEqual(tag, expected_tag)
