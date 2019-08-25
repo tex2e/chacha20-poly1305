@@ -196,5 +196,19 @@ if __name__ == '__main__':
             self.assertEqual(plaintext, expected_plaintext)
             self.assertEqual(tag, expected_tag)
 
+        def test_enc_dec(self):
+            key   = b'A' * 32
+            nonce = b'B' * 12
+            aad   = b'C' * 12
+            plaintext = b'ChaCha20 and Poly1305'
+            ciphertext, tag = encrypt_and_tag(key=key, nonce=nonce,
+                                              plaintext=plaintext, aad=aad)
+
+            plaintext2 = decrypt_and_verify(key=key, nonce=nonce,
+                                            ciphertext=ciphertext, aad=aad,
+                                            mac=tag)
+
+            self.assertEqual(plaintext, plaintext2)
+
 
     unittest.main()
