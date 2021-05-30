@@ -8,6 +8,11 @@ This provides three algorithms:
 3. The CHACHA20-POLY1305 Authenticated Encryption with Associated
     Data (AEAD) construction.
 
+## Unit Tests
+
+```bash
+python -m unittest discover tests
+```
 
 ## References
 

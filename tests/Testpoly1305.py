@@ -1,4 +1,5 @@
 import unittest
+from poly1305 import *
 
 class TestPoly1305(unittest.TestCase):
 
@@ -164,5 +165,9 @@ class TestPoly1305(unittest.TestCase):
         expected_tag = bytes.fromhex('13000000000000000000000000000000')
 
         self.assertEqual(tag, expected_tag)
-if __name__ == '__main__':
-    unittest.main()
+
+
+# if __name__ == '__main__':
+#     unittest.main()
+
+# unittest.main()

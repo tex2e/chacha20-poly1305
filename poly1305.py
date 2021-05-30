@@ -31,4 +31,3 @@ def poly1305_mac(msg: bytes, key: bytes) -> bytes:
         a = (r * a) % p
     a += s
     return num_to_16_le_bytes(a)
-

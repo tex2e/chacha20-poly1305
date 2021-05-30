@@ -76,9 +76,3 @@ def chacha20_encrypt(key: bytes, counter: int, nonce: bytes, plaintext: bytes):
         encrypted_message += xor(block, key_stream)
 
     return encrypted_message
-
-
-
-if __name__ == '__main__':
-
-    unittest.main()
