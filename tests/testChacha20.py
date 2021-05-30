@@ -231,9 +231,3 @@ class TestChacha20(unittest.TestCase):
         """)
 
         self.assertEqual(encrypted_message, expected_bytes)
-
-
-# if __name__ == '__main__':
-#     unittest.main()
-
-# unittest.main()

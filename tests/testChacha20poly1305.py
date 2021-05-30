@@ -152,9 +152,3 @@ class TestChacha20Poly1305(unittest.TestCase):
             key=key, nonce=nonce, ciphertext=ciphertext, aad=aad, mac=tag
         )
         self.assertEqual(plaintext, plaintext2)
-
-
-# if __name__ == "__main__":
-#     unittest.main()
-
-# unittest.main()
