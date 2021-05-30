@@ -1,4 +1,7 @@
 
+[![Chacha20Poly1305](https://circleci.com/gh/tex2e/chacha20-poly1305.svg?style=shield)](https://circleci.com/gh/tex2e/chacha20-poly1305)
+
+
 # ChaCha20 and Poly1305 for IETF Protocols (RFC 8439)
 
 This provides three algorithms:
